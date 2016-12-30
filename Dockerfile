@@ -1,6 +1,15 @@
 FROM php:5.6-fpm
 MAINTAINER jason@cannavale.com
 
+# Generate locale files
+RUN locale-gen en_US.UTF-8
+
+# Export it
+ENV LANG en_US.UTF-8
+
+# Set the env variable DEBIAN_FRONTEND to noninteractive
+ENV DEBIAN_FRONTEND noninteractive
+
 RUN apt-get update
 RUN apt-get install -y build-essential curl libcurl4-gnutls-dev \
                        libmysqlclient-dev libhiredis-dev liboping-dev \
