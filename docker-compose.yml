@@ -1,0 +1,27 @@
+memcached:
+ image: memcached
+ ports:
+  - 11211
+ command: memcached -m 1024m
+
+php:
+ build: .
+ volumes:
+  - /opt/www/bleedcrimson.net:/var/www/bleedcrimson.net
+  - php.ini:/usr/local/etc/php
+ links:
+  - memcached
+ restart: always
+
+bleedcrimson:
+ image: nginx:latest
+ volumes:
+  - /opt/www/bleedcrimson.net:/var/www/bleedcrimson.net
+  - /opt/www/logs/nginx:/var/log/nginx
+  - ./site.conf:/etc/nginx/conf.d/default.conf
+ ports:
+  - "80:80"
+ links:
+  - php
+  - memcached
+ restart: always
